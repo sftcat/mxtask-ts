@@ -9,6 +9,7 @@ import Error from "../../features/error/Error";
 import { IProduct } from "../../utils/model/types";
 
 
+
 // Продукталарни API 'дан юклашлик учун функция 
 async function fetchProducts() {
   const response = await fetch(
@@ -77,10 +78,6 @@ const ProductList = () => {
 };
 
 export default ProductList;
-
-
-
-
 
 
 
