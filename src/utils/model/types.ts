@@ -4,8 +4,6 @@ export interface IProduct {
     Price: number;
 }
 
-
-
 export interface Product {
     Name: string;
 }
