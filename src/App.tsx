@@ -1,10 +1,10 @@
 import React from 'react';
-import ProductList from './common/product/ProductList';
+import MainRouter from './routers/main/MainRouter';
 
 function App(): JSX.Element {
   return (
     <div>
-      <ProductList/>
+      <MainRouter />
     </div>
   );
 }
