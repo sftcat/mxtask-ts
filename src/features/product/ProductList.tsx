@@ -9,10 +9,11 @@ import Error from "../error/Error";
 import { IProduct } from "../../utils/model/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import { Pagination } from "antd"; 
 
-async function fetchProducts() {
+async function fetchProducts(page: number) {
     const response = await fetch(
-        "https://eoussama.github.io/spend-elon-musks-money/goodies.json"
+        `https://eoussama.github.io/spend-elon-musks-money/goodies.json?page=${page}` // page 'нинг параметрини кушамиз
     );
     const data = await response.json();
     return data;
@@ -20,9 +21,10 @@ async function fetchProducts() {
 
 const ProductList = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { data, status } = useQuery(["products"], fetchProducts);
+    const { data, status } = useQuery(["products"], () => fetchProducts(currentPage));
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.products);
+    const [currentPage, setCurrentPage] = useState(1); // currentPage учун холат
 
     const showModal = () => setIsModalVisible(true);
     const handleCancel = () => setIsModalVisible(false);
@@ -39,6 +41,10 @@ const ProductList = () => {
         // Буш булиши мумкин, сабабиб Редакс холатни узи автоматик тарзда узгартиради 
     };
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page); // узгариш булганда currentPage 'ни хам янгилаймиз
+    };
+
     if (status === "loading") {
         return <Loading />;
     }
@@ -47,6 +53,13 @@ const ProductList = () => {
         return <Error />;
     }
 
+    // Вычисляем количество элементов на странице (например, 8 элементов на странице)
+    const pageSize = 8;
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const productsToShow = data.slice(startIndex, endIndex);
+
+    
     return (
         <div className="mt-5 flex justify-center items-center">
             <div>
@@ -63,7 +76,7 @@ const ProductList = () => {
                     <CartModal isVisible={isModalVisible} onClose={handleCancel} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    {data.map((card: IProduct) => (
+                    {productsToShow.map((card: IProduct) => (
                         <ProductCard
                             key={card.Name}
                             card={card}
@@ -72,16 +85,19 @@ const ProductList = () => {
                         />
                     ))}
                 </div>
+                <Pagination
+                    current={currentPage}
+                    total={data.length}
+                    pageSize={pageSize}
+                    onChange={handlePageChange}
+                    className="flex justify-center mt-2 mb-5"
+                />
             </div>
         </div>
     );
 };
 
 export default ProductList;
-
-
-
-
 
 
 
@@ -102,75 +118,78 @@ export default ProductList;
 // import Loading from "../loading/Loading";
 // import Error from "../error/Error";
 // import { IProduct } from "../../utils/model/types";
+// import { useAppSelector } from "../../hooks/ReduxHooks";
 
-
-
-// // Продукталарни API 'дан юклашлик учун функция 
 // async function fetchProducts() {
-//   const response = await fetch(
-//     "https://eoussama.github.io/spend-elon-musks-money/goodies.json" // API
-//   );
-//   const data = await response.json();
-
-//   console.log(data); // data 'ларни бор/йоклигини текшириш
-//   return data;
+//     const response = await fetch(
+//         "https://eoussama.github.io/spend-elon-musks-money/goodies.json"
+//     );
+//     const data = await response.json();
+//     return data;
 // }
 
-
-// // Основной компонент ProductList
 // const ProductList = () => {
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-//   const { data, status } = useQuery(["products"], fetchProducts); // Используем React Query для получения данных
-//   const dispatch = useDispatch(); 
+//     const [isModalVisible, setIsModalVisible] = useState(false);
+//     const { data, status } = useQuery(["products"], fetchProducts);
+//     const dispatch = useDispatch();
+//     const cartItems = useAppSelector((state) => state.products);
 
+//     const showModal = () => setIsModalVisible(true);
+//     const handleCancel = () => setIsModalVisible(false);
 
-//   // Модал ойнанинг очиш/ёпиш функциялари
-//   const showModal = () => setIsModalVisible(true);
-//   const handleCancel = () => setIsModalVisible(false);
+//     const handleClick = (card: IProduct) => {
+//         dispatch(addProduct(card));
+//     };
 
-//   // "В Корзину" тугмаси босилганда, dispatch оркали маълумотларни Redux 'га олиб борувчи функция
-//   const handleClick = (card: IProduct) => {
-//     dispatch(addProduct(card)); // Действие 'ларни Redux 'га юборамиз
-//   };
+//     const countInCart = cartItems.length;
 
+//     const updateCartCount = () => {
+//         // Корзинанинг счётчигини янгилаб турадиган функция
+//         // Товар кушилганда чакирилади
+//         // Буш булиши мумкин, сабабиб Редакс холатни узи автоматик тарзда узгартиради 
+//     };
 
+//     if (status === "loading") {
+//         return <Loading />;
+//     }
 
-//   // Xолатлар
-//   if (status === "loading") {
-//     return <Loading />; // Маълумотлар юкланаётганда UI 'га чикадиган компонент
-//   }
+//     if (status === "error") {
+//         return <Error />;
+//     }
 
-//   if (status === "error") {
-//     return <Error />; // Маълумотлар хато юкланганда UI 'га чикадиган компонент
-//   }
-
-//   return (
-//     <div className="mt-5 flex justify-center items-center">
-//       <div>
-//         <div className="flex items-center justify-center gap-4">
-//           <h1 className="flex justify-center mb-4 text-2xl font-bold font-mono">
-//             Карточки
-//           </h1>
-//           <button
-//             onClick={showModal}
-//             className="px-[6px] py-1 border-blue-600 border-[3px] text-[12px] text-blue-600 font-mono font-bold rounded-[30px]"
-//           >
-//             Корзинка {}
-//           </button>
-//           <CartModal isVisible={isModalVisible} onClose={handleCancel} /> {/* Корзинка ёки модал ойнаси */}
+//     return (
+//         <div className="mt-5 flex justify-center items-center">
+//             <div>
+//                 <div className="flex items-center justify-center gap-4">
+//                     <h1 className="flex justify-center mb-4 text-2xl font-bold font-mono">
+//                         Карточки
+//                     </h1>
+//                     <button
+//                         onClick={showModal}
+//                         className="px-[6px] py-1 border-blue-600 border-[3px] text-[12px] text-blue-600 font-mono font-bold rounded-[30px]"
+//                     >
+//                         {countInCart > 0 ? `Корзинка (${countInCart})` : "Корзинка"}
+//                     </button>
+//                     <CartModal isVisible={isModalVisible} onClose={handleCancel} />
+//                 </div>
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+//                     {data.map((card: IProduct) => (
+//                         <ProductCard
+//                             key={card.Name}
+//                             card={card}
+//                             onClick={handleClick}
+//                             updateCartCount={updateCartCount}
+//                         />
+//                     ))}
+//                 </div>
+//             </div>
 //         </div>
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-//           {/* Продукталарни руйхат тарзида UI 'га чикарамиз */}
-//           {data.map((card: IProduct) => (
-//             <ProductCard key={card.Name} card={card} onClick={handleClick} />
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
+//     );
 // };
 
 // export default ProductList;
+
+
 
 
 

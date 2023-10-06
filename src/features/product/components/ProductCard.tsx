@@ -10,7 +10,7 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ card, onClick, updateCartCount }) => {
     const handleAddToCart = () => {
         onClick(card);
-        updateCartCount(); // Вызываем функцию для обновления счетчика корзины
+        updateCartCount(); // корзинанинг счётчигини янгилаш учун функцияни чакирамиз
     };
 
     return (
@@ -38,6 +38,7 @@ const ProductCard: FC<ProductCardProps> = ({ card, onClick, updateCartCount }) =
 };
 
 export default ProductCard;
+
 
 
 
