@@ -31,3 +31,5 @@ const CartModal: FC<IProps> = ({ isVisible, onClose }) => {
 };
 
 export default CartModal;
+
+

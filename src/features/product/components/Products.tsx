@@ -4,7 +4,7 @@ import { removeProduct } from "../../../store/reducers/productSlice";
 import { useAppSelector } from "../../../hooks/ReduxHooks";
 
 // Products компоненти - руйхатдаги продукталарни курсатади ва учириб юбориш опциясини бажаради
-const Products: FC = () => { // Устанавливаем тип компонента как React.FC
+const Products: FC = () => { 
     const products = useAppSelector((state) => state.products); // products учун типизация
     const dispatch = useDispatch();
 
@@ -20,11 +20,11 @@ const Products: FC = () => { // Устанавливаем тип компоне
                     <li key={product.Name} className="mb-8 border py-2 px-2">
                         <img src={product.Image} alt={product.Name} className="w-[300px]" />
                         <p className="font-mono text-xl mt-1">
-                            {product.Name} - {product.Price}$
+                            {product.Name} - {product.Price.toLocaleString("en-US", {style: "currency", currency: "USD"})}
                         </p>
                         <button
                             onClick={() => handleRemoveProduct(product.Name)}
-                            className="bg-red-500 px-3 py-1 rounded text-white"
+                            className="bg-red-500 px-3 py-1 rounded text-white mt-2"
                         >
                             Удалить 
                         </button>
@@ -36,9 +36,3 @@ const Products: FC = () => { // Устанавливаем тип компоне
 };
 
 export default Products;
-
-
-
-
-
-

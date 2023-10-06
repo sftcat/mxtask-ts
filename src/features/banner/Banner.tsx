@@ -1,9 +1,12 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
+import Header from '../header/Header'
+import Footer from '../footer/Footer'
 
 const Banner: FC = () => {
     return (
         <>
+            <Header />
             <div className="mt-5 flex justify-center items-center">
                 <div>
                     <Link to="/" className='py-1 px-2 rounded-lg border-black border-2 font-mono'>Назад</Link>
@@ -13,6 +16,7 @@ const Banner: FC = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }
