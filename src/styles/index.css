@@ -20,10 +20,7 @@ scroll-behavior: smooth;
 box-sizing: inherit;
 }
 
-*:focus {
-outline: 2px dashed var(--text-color);
-outline-offset: 3px;
-}
+
 
 body {
 height: 100%;

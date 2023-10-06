@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product, ProductState } from "../../utils/model/types";
+import { IProduct, ProductState } from "../../utils/model/types";
 
 // бош холат учун типизиция
-
-
-
-
 const initialState: ProductState = { // бош холат ва унинг типизацияси
     products: [],
 };
@@ -15,7 +11,7 @@ export const productSlice = createSlice({
     initialState,
     reducers: {
         // продуктни руйхатга кушамиз
-        addProduct: (state, action: PayloadAction<Product>) => {
+        addProduct: (state, action: PayloadAction<IProduct>) => {
             state.products.push(action.payload);
         },
         // продуктни руйхатдан чикариб ташлаймиз

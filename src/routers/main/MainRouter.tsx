@@ -1,14 +1,12 @@
 import React, { FC } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import ProductList from '../../common/product/ProductList'
-import NotFound from '../404/NotFound'
+import { mainRoutes } from './mainRoutes'
 
 const MainRouter: FC = () => {
     return (
         <>
             <Routes>
-                <Route path='/' element={<ProductList/>} />
-                <Route element={<NotFound />} path='*' />
+                {mainRoutes.map((route) => <Route key={route.path} path={route.path} element={<route.element/>}/>)}
             </Routes>
         </>
     )
