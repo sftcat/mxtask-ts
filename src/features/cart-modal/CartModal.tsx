@@ -24,7 +24,7 @@ const CartModal: FC<IProps> = ({ isVisible, onClose }) => {
             ]}
             >
             <div>
-                <Products />
+                <Products  />
             </div>
         </Modal>
     );

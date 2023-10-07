@@ -1,15 +1,20 @@
 import React, { FC } from "react";
 import { IProduct } from "../../../utils/model/types";
 import { useState } from "react";
+import { useAppSelector } from "../../../hooks/ReduxHooks";
 
 interface ProductCardProps {
     card: IProduct;
     onClick: (card: IProduct) => void;
     updateCartCount: () => void; // бу пропс функция корзинанинг счётчигини янгилаб туриш учун мулжалланган
+    
 }
 
 const ProductCard: FC<ProductCardProps> = ({ card, onClick, updateCartCount }) => {
+    const {products} = useAppSelector((state) => state)
     const [addedCount, setAddedCount] = useState(0);
+
+    const product = products?.find((item) => item?.Name === card?.Name)
 
     const handleAddToCart = () => {
         onClick(card);
@@ -37,9 +42,9 @@ const ProductCard: FC<ProductCardProps> = ({ card, onClick, updateCartCount }) =
                         В корзину
                     </button>
                 </div>
-                <div className="float-right">
-                    <p>Добавлено: {addedCount}</p>
-                </div>
+                {product?.count && <div className="float-right">
+                    <p>Добавлено: {product?.count}</p>
+                </div>}
             </div>
             
         </div>
@@ -59,10 +64,11 @@ export default ProductCard;
 
 
 
-
 // import React, { FC } from "react";
 // import { IProduct } from "../../../utils/model/types";
 // import { useState } from "react";
+// import { useAppSelector } from "../../../hooks/ReduxHooks";
+
 
 // interface ProductCardProps {
 //     card: IProduct;
@@ -73,11 +79,16 @@ export default ProductCard;
 // const ProductCard: FC<ProductCardProps> = ({ card, onClick, updateCartCount }) => {
 //     const [addedCount, setAddedCount] = useState(0);
 
+//     const cartItems = useAppSelector(state => state.products);
+
 //     const handleAddToCart = () => {
 //         onClick(card);
 //         updateCartCount(); // корзинанинг счётчигини янгилаш учун функцияни чакирамиз
 //         setAddedCount(addedCount + 1);
 //     };
+
+//     const countInCart = cartItems.length;
+
 
 //     return (
 //         <div className="flex justify-center">
@@ -100,7 +111,10 @@ export default ProductCard;
 //                     </button>
 //                 </div>
 //                 <div className="float-right">
-//                     <p>Добавлено: {addedCount}</p>
+//                     <p>
+//                         {/* Добавлено: {addedCount} */}
+//                         {countInCart > 0 ? `Добавлено (${countInCart})` : "Добавлено: "}
+//                     </p>
 //                 </div>
 //             </div>
             
@@ -110,6 +124,19 @@ export default ProductCard;
 // };
 
 // export default ProductCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

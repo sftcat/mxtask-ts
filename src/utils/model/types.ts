@@ -2,6 +2,7 @@ export interface IProduct {
     Name: string;
     Image: string;
     Price: number;
+    count:number
 }
 
 

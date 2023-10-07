@@ -75,14 +75,16 @@ const ProductList = () => {
                     <CartModal isVisible={isModalVisible} onClose={handleCancel} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    {productsToShow.map((card: IProduct) => (
+                    {productsToShow.map((card: IProduct) => {
+                        return (
                         <ProductCard
                             key={card.Name}
                             card={card}
                             onClick={handleClick}
                             updateCartCount={updateCartCount}
                         />
-                    ))}
+                    )
+                    })}
                 </div>
                 <Pagination
                     current={currentPage}
