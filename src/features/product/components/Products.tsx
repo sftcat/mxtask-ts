@@ -20,10 +20,8 @@ const Products: FC = () => {
         dispatch(setCount({...product, count: product?.count + 1}))
     };
 
-    const decrementValue = () => {
-        // if (count > 0) {
-        // setCount(count - 1);
-        // }
+    const decrementValue = (product: IProduct) => {
+        dispatch(setCount({...product, count: product?.count ? product?.count - 1 > 0 : product?.count === 0}))
     };
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +48,7 @@ const Products: FC = () => {
                                 </button>
                             </div>
                             <div>
-                                <button className="mr-2 text-[15px]" onClick={() => decrementValue()}>-</button>
+                                <button className="mr-2 text-[15px]" onClick={() => decrementValue(product)}>-</button>
                                 <input
                                     type="number"
                                     className="border w-[35px] border-black pl-[4px]"
