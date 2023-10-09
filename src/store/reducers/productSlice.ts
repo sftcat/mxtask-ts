@@ -1,38 +1,44 @@
 import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
 import { IProduct, ProductState } from "../../utils/model/types";
 
-// бош холат учун типизиция
+// Начальное состояние хранилища продуктов
 const initialState: ProductState = {
-  // бош холат ва унинг типизацияси
-  products: [],
+  products: [], // Массив продуктов
 };
 
+// Создаем срез Redux для управления продуктами
 export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    // продуктни руйхатга кушамиз
+    // Добавление продукта в массив или обновление его счетчика
     addProduct: (state, action: PayloadAction<IProduct>) => {
-      // statedagi ma'luymotlarni ko'rish yoki foydalanish uchun
+      // Получаем текущее состояние продуктов
       const { products } = current(state);
+      
+      // Проверяем, существует ли продукт с таким же именем
       if (products?.some((item) => item?.Name === action?.payload?.Name)) {
+        // Если существует, увеличиваем счетчик
         state.products = products?.map((item) =>
           item?.Name === action?.payload?.Name
             ? { ...item, count: item?.count + 1 }
             : item
         );
       } else {
+        // Если не существует, добавляем новый продукт
         state.products.push({ ...action.payload, count: 1 });
       }
     },
+    // Установка счетчика продукта
     setCount: (state, action: PayloadAction<IProduct>) => {
+      // Обновляем счетчик продукта по его имени
       state.products = state?.products?.map((item) =>
         item?.Name === action?.payload?.Name
           ? { ...item, count: action?.payload?.count }
           : item
       );
     },
-    // продуктни руйхатдан чикариб ташлаймиз
+    // Удаление продукта из массива по имени
     removeProduct: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(
         (product) => product.Name !== action.payload
@@ -41,29 +47,6 @@ export const productSlice = createSlice({
   },
 });
 
-export const { addProduct, removeProduct,setCount } = productSlice.actions;
-
+// Экспортируем действия и редуктор среза
+export const { addProduct, removeProduct, setCount } = productSlice.actions;
 export default productSlice.reducer;
-
-// const prod =[
-//     {
-//         name:"coffee",
-//         narx: 1000,
-//         count: 1
-//     }
-// ]
-
-// if(prod?.some((item) => item?.name === "name")) {
-//     prod = prod?.map((item) => (item?.name === "name" ? {
-//     ...item,
-//     count: item?.count + 1
-//     } : item))
-// } else {
-//         prod.push(
-//             {
-//                 name:"coffee",
-//                 narx: 1000,
-//                 count: 1
-//             }
-//         )
-// }

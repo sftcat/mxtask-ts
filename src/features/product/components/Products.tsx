@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import {  useDispatch } from "react-redux";
 import { removeProduct, setCount } from "../../../store/reducers/productSlice";
 import { useAppSelector } from "../../../hooks/ReduxHooks";
